@@ -6,9 +6,9 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import ArticleCard from "../components/ArticleCard";
 
-// Define the type for an article
 type Article = {
   id: string;
   title: string;
@@ -17,6 +17,7 @@ type Article = {
 
 export default function HomeScreen() {
   const [layout, setLayout] = useState<"full" | "compact" | "tight">("full");
+  const [selectedTag, setSelectedTag] = useState<string>("All");
 
   // Dummy data for articles
   const articles: Article[] = [
@@ -34,8 +35,17 @@ export default function HomeScreen() {
       title: "Design for Small Spaces",
       tags: ["Small Homes", "Interior Design"],
     },
-    // Add more dummy articles as needed
   ];
+
+  // Extract unique tags from articles
+  const tags = Array.from(new Set(articles.flatMap((article) => article.tags)));
+  tags.unshift("All"); // Add "All" option
+
+  // Filter articles based on selected tag
+  const filteredArticles =
+    selectedTag === "All"
+      ? articles
+      : articles.filter((article) => article.tags.includes(selectedTag));
 
   const renderArticle = ({ item }: { item: Article }) => (
     <ArticleCard article={item} layout={layout} />
@@ -53,8 +63,20 @@ export default function HomeScreen() {
           <Text style={styles.addButton}>+</Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.filterContainer}>
+        <Text style={styles.filterLabel}>Filter by Tag:</Text>
+        <Picker
+          selectedValue={selectedTag}
+          style={styles.picker}
+          onValueChange={(itemValue) => setSelectedTag(itemValue)}
+        >
+          {tags.map((tag, index) => (
+            <Picker.Item key={index} label={tag} value={tag} />
+          ))}
+        </Picker>
+      </View>
       <FlatList
-        data={articles}
+        data={filteredArticles}
         renderItem={renderArticle}
         keyExtractor={(item) => item.id}
       />
@@ -80,5 +102,18 @@ const styles = StyleSheet.create({
   addButton: {
     fontSize: 24,
     fontWeight: "bold",
+  },
+  filterContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+  },
+  filterLabel: {
+    fontSize: 16,
+    marginRight: 10,
+  },
+  picker: {
+    height: 50,
+    width: 150,
   },
 });

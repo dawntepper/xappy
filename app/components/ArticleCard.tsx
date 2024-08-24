@@ -6,7 +6,7 @@ type ArticleCardProps = {
     id: string;
     title: string;
     tags: string[];
-  };
+  } | null; // Allow article to be null to prevent crashes
   layout?: "full" | "compact" | "tight";
 };
 
@@ -14,6 +14,10 @@ export default function ArticleCard({
   article,
   layout = "full",
 }: ArticleCardProps) {
+  if (!article) {
+    return null; // Don't render the component if article is null or undefined
+  }
+
   return (
     <TouchableOpacity style={[styles.card, styles[layout]]}>
       <Text style={styles.title} numberOfLines={layout === "tight" ? 1 : 2}>

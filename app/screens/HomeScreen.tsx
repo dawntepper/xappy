@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { useNavigation } from "expo-router";
 import ArticleCard from "../components/ArticleCard";
 
 // Define the type for an article
@@ -17,6 +18,7 @@ type Article = {
 
 export default function HomeScreen() {
   const [layout, setLayout] = useState<"full" | "compact" | "tight">("full");
+  const navigation = useNavigation();
 
   // Dummy data for articles
   const articles: Article[] = [
@@ -34,11 +36,15 @@ export default function HomeScreen() {
       title: "Design for Small Spaces",
       tags: ["Small Homes", "Interior Design"],
     },
-    // Add more dummy articles as needed
   ];
 
+  const handleTagPress = (tag: string) => {
+    console.log("Navigating with tag:", tag);
+    (navigation as any).navigate("screens/CollectionsScreen", { tag });
+  };
+
   const renderArticle = ({ item }: { item: Article }) => (
-    <ArticleCard article={item} layout={layout} />
+    <ArticleCard article={item} layout={layout} onTagPress={handleTagPress} />
   );
 
   return (

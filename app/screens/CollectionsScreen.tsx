@@ -52,6 +52,60 @@ const collections: Collection[] = [
       },
     ],
   },
+  {
+    id: "3",
+    name: "Interior Design",
+    articles: [
+      {
+        id: "6",
+        title: "Small Homes",
+        tags: ["Small Homes", "Interior Design"],
+      },
+      {
+        id: "10",
+        title: "Design for Small Spaces",
+        tags: ["NFL", "Interior Design"],
+      },
+    ],
+  },
+  {
+    id: "4",
+    name: "Music",
+    articles: [
+      {
+        id: "7",
+        title: "Top Ten Power Ballads",
+        tags: ["Music"],
+      },
+      {
+        id: "10",
+        title: "Design for Small Spaces",
+        tags: ["NFL", "Interior Design"],
+      },
+    ],
+  },
+  {
+    id: "5",
+    name: "Technology",
+    articles: [
+      {
+        id: "9",
+        title: "New ioT Trends",
+        tags: ["Technology", "iOT"],
+      },
+    ],
+  },
+  {
+    id: "6",
+    name: "iOT",
+    articles: [
+      {
+        id: "9",
+        title: "New ioT Trends",
+        tags: ["Technology", "iOT"],
+      },
+    ],
+  },
   // Add more collections as needed
 ];
 

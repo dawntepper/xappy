@@ -23,6 +23,17 @@ export default function HomeScreen() {
     { id: "1", title: "Keynote Speakers", tags: ["DNC", "Elections"] },
     { id: "2", title: "Top Ten RBs", tags: ["NFL", "Fantasy Football"] },
     { id: "3", title: "New Tech Trends", tags: ["Technology", "Innovation"] },
+    { id: "4", title: "Voting Locations", tags: ["Vote", "Elections"] },
+    { id: "5", title: "Top Ten WRs", tags: ["NFL", "Fantasy Football"] },
+    { id: "6", title: "Small Homes", tags: ["Small Homes", "Interior Design"] },
+    { id: "7", title: "Top Ten Power Ballads", tags: ["Music"] },
+    { id: "8", title: "Top Ten QBs", tags: ["NFL", "Fantasy Football"] },
+    { id: "9", title: "New ioT Trends", tags: ["Technology", "ioT"] },
+    {
+      id: "10",
+      title: "Design for Small Spaces",
+      tags: ["Small Homes", "Interior Design"],
+    },
     // Add more dummy articles as needed
   ];
 

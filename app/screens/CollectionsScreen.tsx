@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import ArticleCard from "../components/ArticleCard";
 
 type Article = {
@@ -110,6 +111,28 @@ const collections: Collection[] = [
 ];
 
 export default function CollectionsScreen() {
+  const [selectedTag, setSelectedTag] = useState<string>("All");
+
+  // Extract unique tags from all collections
+  const allTags = Array.from(
+    new Set(
+      collections.flatMap((collection) =>
+        collection.articles.flatMap((article) => article.tags)
+      )
+    )
+  );
+  allTags.unshift("All");
+
+  // Filter collections based on selected tag
+  const filteredCollections =
+    selectedTag === "All"
+      ? collections
+      : collections.filter((collection) =>
+          collection.articles.some((article) =>
+            article.tags.includes(selectedTag)
+          )
+        );
+
   const renderArticle = ({ item }: { item: Article }) => (
     <ArticleCard article={item} layout="compact" />
   );
@@ -139,8 +162,20 @@ export default function CollectionsScreen() {
           <Text style={styles.addButton}>+</Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.filterContainer}>
+        <Text style={styles.filterLabel}>Filter by Tag:</Text>
+        <Picker
+          selectedValue={selectedTag}
+          style={styles.picker}
+          onValueChange={(itemValue) => setSelectedTag(itemValue)}
+        >
+          {allTags.map((tag, index) => (
+            <Picker.Item key={index} label={tag} value={tag} />
+          ))}
+        </Picker>
+      </View>
       <FlatList
-        data={collections}
+        data={filteredCollections}
         renderItem={renderCollection}
         keyExtractor={(item) => item.id}
       />
@@ -168,6 +203,20 @@ const styles = StyleSheet.create({
   addButton: {
     fontSize: 24,
     fontWeight: "bold",
+  },
+  filterContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+    paddingLeft: 15,
+  },
+  filterLabel: {
+    fontSize: 16,
+    marginRight: 10,
+  },
+  picker: {
+    height: 50,
+    width: 150,
   },
   collectionContainer: {
     marginBottom: 20,

@@ -6,16 +6,18 @@ type ArticleCardProps = {
     id: string;
     title: string;
     tags: string[];
-  } | null; // Allow article to be null to prevent crashes
+  } | null;
   layout?: "full" | "compact" | "tight";
+  onTagPress?: (tag: string) => void; // Add this prop
 };
 
 export default function ArticleCard({
   article,
   layout = "full",
+  onTagPress,
 }: ArticleCardProps) {
   if (!article) {
-    return null; // Don't render the component if article is null or undefined
+    return null;
   }
 
   return (
@@ -26,9 +28,9 @@ export default function ArticleCard({
       {layout !== "tight" && (
         <View style={styles.tags}>
           {article.tags.map((tag, index) => (
-            <Text key={index} style={styles.tag}>
-              {tag}
-            </Text>
+            <TouchableOpacity key={index} onPress={() => onTagPress?.(tag)}>
+              <Text style={styles.tag}>{tag}</Text>
+            </TouchableOpacity>
           ))}
         </View>
       )}

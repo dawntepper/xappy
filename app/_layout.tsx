@@ -5,12 +5,6 @@ export default function AppLayout() {
   return (
     <Tabs>
       <Tabs.Screen
-        name="index"
-        options={{
-          href: null,
-        }}
-      />
-      <Tabs.Screen
         name="screens/HomeScreen"
         options={{
           title: "Home",

@@ -1,12 +1,7 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import React, { useState, useEffect } from "react";
+import { View, Text, FlatList, StyleSheet } from "react-native";
+import { Picker } from "@react-native-picker/picker"; // Import Picker
+import { useLocalSearchParams } from "expo-router"; // Correct hook for accessing params
 import ArticleCard from "../components/ArticleCard";
 
 type Article = {
@@ -58,14 +53,14 @@ const collections: Collection[] = [
     name: "Interior Design",
     articles: [
       {
-        id: "6",
+        id: "13",
         title: "Small Homes",
         tags: ["Small Homes", "Interior Design"],
       },
       {
         id: "10",
         title: "Design for Small Spaces",
-        tags: ["NFL", "Interior Design"],
+        tags: ["Small Homes", "Interior Design"],
       },
     ],
   },
@@ -73,16 +68,8 @@ const collections: Collection[] = [
     id: "4",
     name: "Music",
     articles: [
-      {
-        id: "7",
-        title: "Top Ten Power Ballads",
-        tags: ["Music"],
-      },
-      {
-        id: "10",
-        title: "Design for Small Spaces",
-        tags: ["NFL", "Interior Design"],
-      },
+      { id: "7", title: "Top Ten Power Ballads", tags: ["Music"] },
+      { id: "8", title: "Top Ten QBs", tags: ["NFL", "Fantasy Football"] },
     ],
   },
   {
@@ -92,76 +79,70 @@ const collections: Collection[] = [
       {
         id: "9",
         title: "New ioT Trends",
-        tags: ["Technology", "iOT"],
+        tags: ["Technology", "ioT", "Innovation"],
       },
     ],
   },
   {
     id: "6",
-    name: "iOT",
+    name: "Elections",
     articles: [
       {
-        id: "9",
-        title: "New ioT Trends",
-        tags: ["Technology", "iOT"],
+        id: "11",
+        title: "Who's It Gonna Be?",
+        tags: ["Elections", "Vote2024", "DNC"],
       },
     ],
   },
-  // Add more collections as needed
 ];
 
 export default function CollectionsScreen() {
-  const [selectedTag, setSelectedTag] = useState<string>("All");
+  const params = useLocalSearchParams(); // Get all params
+  let initialTag: string = Array.isArray(params.tag)
+    ? params.tag[0]
+    : params.tag || "All"; // Ensure tag is a string
 
-  // Extract unique tags from all collections
-  const allTags = Array.from(
+  const [selectedTag, setSelectedTag] = useState<string>(initialTag); // State for selected tag
+  const [filteredArticles, setFilteredArticles] = useState<Article[]>([]); // State for filtered articles
+
+  useEffect(() => {
+    console.log("Filtering with tag:", selectedTag); // Debugging statement
+    if (selectedTag === "All" || !selectedTag) {
+      // Display all articles if "All" is selected or no tag is passed
+      const allArticles = collections.flatMap(
+        (collection) => collection.articles
+      );
+      setFilteredArticles(allArticles);
+      console.log("All articles:", allArticles); // Debugging statement
+    } else {
+      // Filter articles by the selected tag
+      const filtered = collections
+        .flatMap((collection) => collection.articles)
+        .filter((article) => article.tags.includes(selectedTag));
+      setFilteredArticles(filtered);
+      console.log("Filtered articles:", filtered); // Debugging statement
+    }
+  }, [selectedTag]); // Run effect when selectedTag changes
+
+  // Extract unique tags from all articles
+  const uniqueTags = Array.from(
     new Set(
       collections.flatMap((collection) =>
         collection.articles.flatMap((article) => article.tags)
       )
     )
   );
-  allTags.unshift("All");
-
-  // Filter collections based on selected tag
-  const filteredCollections =
-    selectedTag === "All"
-      ? collections
-      : collections.filter((collection) =>
-          collection.articles.some((article) =>
-            article.tags.includes(selectedTag)
-          )
-        );
+  uniqueTags.unshift("All"); // Add "All" to the list of tags
 
   const renderArticle = ({ item }: { item: Article }) => (
     <ArticleCard article={item} layout="compact" />
   );
 
-  const renderCollection = ({ item }: { item: Collection }) => (
-    <View style={styles.collectionContainer}>
-      <Text style={styles.collectionName}>{item.name}</Text>
-      <FlatList
-        data={item.articles}
-        renderItem={renderArticle}
-        keyExtractor={(article) => article.id}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-    </View>
-  );
-
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Collections</Text>
-        <TouchableOpacity
-          onPress={() => {
-            /* Add new collection logic */
-          }}
-        >
-          <Text style={styles.addButton}>+</Text>
-        </TouchableOpacity>
-      </View>
+      <Text style={styles.title}>Articles tagged with "{selectedTag}"</Text>
+
+      {/* Dropdown for filtering by tag */}
       <View style={styles.filterContainer}>
         <Text style={styles.filterLabel}>Filter by Tag:</Text>
         <Picker
@@ -169,14 +150,15 @@ export default function CollectionsScreen() {
           style={styles.picker}
           onValueChange={(itemValue) => setSelectedTag(itemValue)}
         >
-          {allTags.map((tag, index) => (
+          {uniqueTags.map((tag, index) => (
             <Picker.Item key={index} label={tag} value={tag} />
           ))}
         </Picker>
       </View>
+
       <FlatList
-        data={filteredCollections}
-        renderItem={renderCollection}
+        data={filteredArticles}
+        renderItem={renderArticle}
         keyExtractor={(item) => item.id}
       />
     </View>
@@ -188,27 +170,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
-  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-  },
-  addButton: {
-    fontSize: 24,
-    fontWeight: "bold",
+    padding: 15,
   },
   filterContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
-    paddingLeft: 15,
+    paddingHorizontal: 15,
+    paddingBottom: 15,
   },
   filterLabel: {
     fontSize: 16,
@@ -217,14 +188,5 @@ const styles = StyleSheet.create({
   picker: {
     height: 50,
     width: 150,
-  },
-  collectionContainer: {
-    marginBottom: 20,
-  },
-  collectionName: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginLeft: 15,
-    marginBottom: 10,
   },
 });

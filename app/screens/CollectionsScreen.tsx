@@ -140,7 +140,7 @@ export default function CollectionsScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Articles tagged with "{selectedTag}"</Text>
+      <Text style={styles.title}>Collection: {selectedTag}</Text>
 
       {/* Dropdown for filtering by tag */}
       <View style={styles.filterContainer}>

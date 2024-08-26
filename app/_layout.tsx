@@ -18,6 +18,24 @@ export default function AppLayout() {
           tabBarLabel: "Collections",
         }}
       />
+      <Tabs.Screen
+        name="index"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="components/ArticleCard"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="components/ParallaxScrollView"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }

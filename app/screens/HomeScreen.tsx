@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Linking } from "react-native";
 import {
   View,
   Text,
@@ -87,7 +88,9 @@ export default function HomeScreen() {
   ];
 
   const handleArticlePress = (url: string) => {
-    setSelectedUrl(url);
+    Linking.openURL(url).catch((err) =>
+      console.error("An error occurred", err)
+    );
   };
 
   const handleCloseBrowser = () => {

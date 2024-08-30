@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { useNavigation } from "expo-router";
+import { useRouter } from "expo-router";
 import ArticleCard from "../components/ArticleCard";
 import InAppBrowser from "../components/InAppBrowser";
 
@@ -18,8 +18,8 @@ type Article = {
 };
 
 export default function HomeScreen() {
-  const [layout, setLayout] = useState<"full" | "compact" | "tight">("full");
-  const navigation = useNavigation();
+  //const [layout, setLayout] = useState<"full" | "compact" | "tight">("full");
+
   const [selectedUrl, setSelectedUrl] = useState<string | null>(null);
 
   // Dummy data for articles
@@ -85,6 +85,7 @@ export default function HomeScreen() {
       url: "http://architectualdigest.com",
     },
   ];
+
   const handleArticlePress = (url: string) => {
     setSelectedUrl(url);
   };
@@ -93,15 +94,20 @@ export default function HomeScreen() {
     setSelectedUrl(null);
   };
 
+  const router = useRouter();
+
   const handleTagPress = (tag: string) => {
     console.log("Navigating with tag:", tag);
-    (navigation as any).navigate("screens/CollectionsScreen", { tag });
+    router.push({
+      pathname: "/screens/CollectionsScreen",
+      params: { tag },
+    });
   };
 
   const renderArticle = ({ item }: { item: Article }) => (
     <ArticleCard
       article={item}
-      layout={layout}
+      //layout={layout}
       onPress={handleArticlePress}
       onTagPress={handleTagPress}
     />

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useFocusEffect } from "expo-router";
 
 import { Linking } from "react-native";
 import { View, Text, FlatList, StyleSheet } from "react-native";
@@ -168,6 +169,13 @@ export default function CollectionsScreen() {
     />
   );
 
+  useFocusEffect(
+    useCallback(() => {
+      const tagParam = Array.isArray(params.tag) ? params.tag[0] : params.tag;
+      setSelectedTag(tagParam || "All");
+    }, [params.tag])
+  );
+
   useEffect(() => {
     if (selectedTag === "All" || !selectedTag) {
       const allArticles = collections.flatMap(
@@ -175,15 +183,12 @@ export default function CollectionsScreen() {
       );
       setFilteredArticles(allArticles);
     } else {
-      // Filter articles by the selected tag
       const filtered = collections
         .flatMap((collection) => collection.articles)
         .filter((article) => article.tags.includes(selectedTag));
       setFilteredArticles(filtered);
-      console.log("Filtered articles:", filtered);
     }
   }, [selectedTag]); // Run effect when selectedTag changes
-  console.log("selectedTag:", selectedTag);
 
   // Extract unique tags from all articles
   const uniqueTags = Array.from(

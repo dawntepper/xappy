@@ -100,7 +100,7 @@ export default function HomeScreen() {
   const router = useRouter();
 
   const handleTagPress = (tag: string) => {
-    console.log("Navigating with tag:", tag);
+    console.log("Pass tag from HomeScreen:", tag);
     router.push({
       pathname: "/screens/CollectionsScreen",
       params: { tag },

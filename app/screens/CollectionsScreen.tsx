@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import { Linking } from "react-native";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import { Picker } from "@react-native-picker/picker"; // Import Picker
@@ -136,6 +137,7 @@ export default function CollectionsScreen() {
   const [selectedUrl, setSelectedUrl] = useState<string | null>(null);
 
   const params = useLocalSearchParams(); // Get all params
+
   let initialTag: string = Array.isArray(params.tag)
     ? params.tag[0]
     : params.tag || "All"; // Ensure tag is a string
@@ -149,32 +151,39 @@ export default function CollectionsScreen() {
     );
   };
 
+  const handleTagPress = (tag: string) => {
+    router.push({
+      pathname: "/screens/CollectionsScreen",
+      params: { tag },
+    });
+    setSelectedTag(tag);
+  };
+
   const renderArticle = ({ item }: { item: Article }) => (
     <ArticleCard
       article={item}
       layout="compact"
       onPress={() => handleArticlePress(item.url)}
+      onTagPress={handleTagPress}
     />
   );
 
   useEffect(() => {
-    console.log("Filtering with tag:", selectedTag); // Debugging statement
     if (selectedTag === "All" || !selectedTag) {
-      // Display all articles if "All" is selected or no tag is passed
       const allArticles = collections.flatMap(
         (collection) => collection.articles
       );
       setFilteredArticles(allArticles);
-      console.log("All articles:", allArticles); // Debugging statement
     } else {
       // Filter articles by the selected tag
       const filtered = collections
         .flatMap((collection) => collection.articles)
         .filter((article) => article.tags.includes(selectedTag));
       setFilteredArticles(filtered);
-      console.log("Filtered articles:", filtered); // Debugging statement
+      console.log("Filtered articles:", filtered);
     }
   }, [selectedTag]); // Run effect when selectedTag changes
+  console.log("selectedTag:", selectedTag);
 
   // Extract unique tags from all articles
   const uniqueTags = Array.from(

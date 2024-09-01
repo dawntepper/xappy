@@ -123,7 +123,7 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Xappy</Text>
+        <Text style={styles.title}>ReadPress</Text>
         <TouchableOpacity
           onPress={() => {
             /* Add new article logic */

@@ -222,12 +222,19 @@ export default function CollectionsScreen() {
         data={filteredArticles}
         renderItem={renderArticle}
         keyExtractor={(item) => item.id}
+        contentContainerStyle={{ flexGrow: 1 }}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  webView: {
+    flex: 1,
+    marginRight: "auto",
+    marginLeft: "auto",
+    width: 480,
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",

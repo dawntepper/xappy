@@ -142,6 +142,12 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  webView: {
+    flex: 1,
+    marginRight: "auto",
+    marginLeft: "auto",
+    width: 480,
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",

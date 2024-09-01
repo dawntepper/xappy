@@ -36,6 +36,18 @@ export default function AppLayout() {
           href: null,
         }}
       />
+      <Tabs.Screen
+        name="components/InAppBrowser"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="components/ArticlePreview"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }

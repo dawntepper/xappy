@@ -6,14 +6,17 @@ type ArticleCardProps = {
     id: string;
     title: string;
     tags: string[];
+    url: string;
   } | null;
   layout?: "full" | "compact" | "tight";
-  onTagPress?: (tag: string) => void; // Add this prop
+  onPress: (url: string) => void;
+  onTagPress?: (tag: string) => void;
 };
 
 export default function ArticleCard({
   article,
   layout = "full",
+  onPress,
   onTagPress,
 }: ArticleCardProps) {
   if (!article) {
@@ -21,14 +24,20 @@ export default function ArticleCard({
   }
 
   return (
-    <TouchableOpacity style={[styles.card, styles[layout]]}>
+    <TouchableOpacity
+      style={[styles.card, styles[layout]]}
+      onPress={() => onPress(article.url)}
+    >
       <Text style={styles.title} numberOfLines={layout === "tight" ? 1 : 2}>
         {article.title}
       </Text>
       {layout !== "tight" && (
         <View style={styles.tags}>
           {article.tags.map((tag, index) => (
-            <TouchableOpacity key={index} onPress={() => onTagPress?.(tag)}>
+            <TouchableOpacity
+              key={index}
+              onPress={() => onTagPress && onTagPress(tag)}
+            >
               <Text style={styles.tag}>{tag}</Text>
             </TouchableOpacity>
           ))}

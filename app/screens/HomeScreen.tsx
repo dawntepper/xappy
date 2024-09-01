@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Linking } from "react-native";
 import {
   View,
   Text,
@@ -6,46 +7,118 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { useNavigation } from "expo-router";
+import { useRouter } from "expo-router";
 import ArticleCard from "../components/ArticleCard";
+import InAppBrowser from "../components/InAppBrowser";
 
-// Define the type for an article
 type Article = {
   id: string;
   title: string;
   tags: string[];
+  url: string;
 };
 
 export default function HomeScreen() {
-  const [layout, setLayout] = useState<"full" | "compact" | "tight">("full");
-  const navigation = useNavigation();
+  //const [layout, setLayout] = useState<"full" | "compact" | "tight">("full");
+
+  const [selectedUrl, setSelectedUrl] = useState<string | null>(null);
 
   // Dummy data for articles
   const articles: Article[] = [
-    { id: "1", title: "Keynote Speakers", tags: ["DNC", "Elections"] },
-    { id: "2", title: "Top Ten RBs", tags: ["NFL", "Fantasy Football"] },
-    { id: "3", title: "New Tech Trends", tags: ["Technology", "Innovation"] },
-    { id: "4", title: "Voting Locations", tags: ["Vote", "Elections"] },
-    { id: "5", title: "Top Ten WRs", tags: ["NFL", "Fantasy Football"] },
-    { id: "6", title: "Small Homes", tags: ["Small Homes", "Interior Design"] },
-    { id: "7", title: "Top Ten Power Ballads", tags: ["Music"] },
-    { id: "8", title: "Top Ten QBs", tags: ["NFL", "Fantasy Football"] },
-    { id: "9", title: "New ioT Trends", tags: ["Technology", "ioT"] },
+    {
+      id: "1",
+      title: "Keynote Speakers",
+      tags: ["DNC", "Elections"],
+      url: "http://msnbc.com",
+    },
+    {
+      id: "2",
+      title: "Top Ten RBs",
+      tags: ["NFL", "Fantasy Football"],
+      url: "http://espn.com",
+    },
+    {
+      id: "3",
+      title: "New Tech Trends",
+      tags: ["Technology", "Innovation"],
+      url: "http://indiehacker.com",
+    },
+    {
+      id: "4",
+      title: "Voting Locations",
+      tags: ["Vote", "Elections"],
+      url: "http://nytimes.com",
+    },
+    {
+      id: "5",
+      title: "Top Ten WRs",
+      tags: ["NFL", "Fantasy Football"],
+      url: "http://rotoballer.com",
+    },
+    {
+      id: "6",
+      title: "Small Homes",
+      tags: ["Small Homes", "Interior Design"],
+      url: "http://dwell.com",
+    },
+    {
+      id: "7",
+      title: "Top Ten Power Ballads",
+      tags: ["Music"],
+      url: "http://spotify.com",
+    },
+    {
+      id: "8",
+      title: "Top Ten QBs",
+      tags: ["NFL", "Fantasy Football"],
+      url: "http://rotowire.com",
+    },
+    {
+      id: "9",
+      title: "New ioT Trends",
+      tags: ["Technology", "ioT"],
+      url: "http://wirecutter.com",
+    },
     {
       id: "10",
       title: "Design for Small Spaces",
       tags: ["Small Homes", "Interior Design"],
+      url: "http://architectualdigest.com",
     },
   ];
 
+  const handleArticlePress = (url: string) => {
+    Linking.openURL(url).catch((err) =>
+      console.error("An error occurred", err)
+    );
+  };
+
+  const handleCloseBrowser = () => {
+    setSelectedUrl(null);
+  };
+
+  const router = useRouter();
+
   const handleTagPress = (tag: string) => {
-    console.log("Navigating with tag:", tag);
-    (navigation as any).navigate("screens/CollectionsScreen", { tag });
+    console.log("Pass tag from HomeScreen:", tag);
+    router.push({
+      pathname: "/screens/CollectionsScreen",
+      params: { tag },
+    });
   };
 
   const renderArticle = ({ item }: { item: Article }) => (
-    <ArticleCard article={item} layout={layout} onTagPress={handleTagPress} />
+    <ArticleCard
+      article={item}
+      //layout={layout}
+      onPress={handleArticlePress}
+      onTagPress={handleTagPress}
+    />
   );
+
+  if (selectedUrl) {
+    return <InAppBrowser url={selectedUrl} onClose={handleCloseBrowser} />;
+  }
 
   return (
     <View style={styles.container}>
@@ -69,6 +142,12 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  webView: {
+    flex: 1,
+    marginRight: "auto",
+    marginLeft: "auto",
+    width: 480,
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",

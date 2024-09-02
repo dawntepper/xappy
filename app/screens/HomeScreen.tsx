@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Linking } from "react-native";
+import React, { useState, useEffect } from "react";
+import { fetchArticles, Article } from "../services/firestore";
 import {
+  Linking,
   View,
   Text,
   FlatList,
@@ -11,93 +12,35 @@ import { useRouter } from "expo-router";
 import ArticleCard from "../components/ArticleCard";
 import InAppBrowser from "../components/InAppBrowser";
 
-type Article = {
-  id: string;
-  title: string;
-  tags: string[];
-  url: string;
-};
-
 export default function HomeScreen() {
-  //const [layout, setLayout] = useState<"full" | "compact" | "tight">("full");
-
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedUrl, setSelectedUrl] = useState<string | null>(null);
+  const router = useRouter();
 
-  // Dummy data for articles
-  const articles: Article[] = [
-    {
-      id: "1",
-      title: "Keynote Speakers",
-      tags: ["DNC", "Elections"],
-      url: "http://msnbc.com",
-    },
-    {
-      id: "2",
-      title: "Top Ten RBs",
-      tags: ["NFL", "Fantasy Football"],
-      url: "http://espn.com",
-    },
-    {
-      id: "3",
-      title: "New Tech Trends",
-      tags: ["Technology", "Innovation"],
-      url: "http://indiehacker.com",
-    },
-    {
-      id: "4",
-      title: "Voting Locations",
-      tags: ["Vote", "Elections"],
-      url: "http://nytimes.com",
-    },
-    {
-      id: "5",
-      title: "Top Ten WRs",
-      tags: ["NFL", "Fantasy Football"],
-      url: "http://rotoballer.com",
-    },
-    {
-      id: "6",
-      title: "Small Homes",
-      tags: ["Small Homes", "Interior Design"],
-      url: "http://dwell.com",
-    },
-    {
-      id: "7",
-      title: "Top Ten Power Ballads",
-      tags: ["Music"],
-      url: "http://spotify.com",
-    },
-    {
-      id: "8",
-      title: "Top Ten QBs",
-      tags: ["NFL", "Fantasy Football"],
-      url: "http://rotowire.com",
-    },
-    {
-      id: "9",
-      title: "New ioT Trends",
-      tags: ["Technology", "ioT"],
-      url: "http://wirecutter.com",
-    },
-    {
-      id: "10",
-      title: "Design for Small Spaces",
-      tags: ["Small Homes", "Interior Design"],
-      url: "http://architectualdigest.com",
-    },
-  ];
+  useEffect(() => {
+    const loadArticles = async () => {
+      try {
+        const fetchedArticles = await fetchArticles();
+        setArticles(fetchedArticles);
+      } catch (error) {
+        console.error("Error fetching articles:", error);
+        // Handle error (e.g., show error message to user)
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadArticles();
+  }, []);
 
   const handleArticlePress = (url: string) => {
-    Linking.openURL(url).catch((err) =>
-      console.error("An error occurred", err)
-    );
+    setSelectedUrl(url);
   };
 
   const handleCloseBrowser = () => {
     setSelectedUrl(null);
   };
-
-  const router = useRouter();
 
   const handleTagPress = (tag: string) => {
     console.log("Pass tag from HomeScreen:", tag);
@@ -110,11 +53,18 @@ export default function HomeScreen() {
   const renderArticle = ({ item }: { item: Article }) => (
     <ArticleCard
       article={item}
-      //layout={layout}
       onPress={handleArticlePress}
       onTagPress={handleTagPress}
     />
   );
+
+  if (loading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   if (selectedUrl) {
     return <InAppBrowser url={selectedUrl} onClose={handleCloseBrowser} />;

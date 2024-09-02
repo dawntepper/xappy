@@ -1,0 +1,110 @@
+{
+  "articles": {
+    "1": {
+      "title": "Keynote Speakers",
+      "tags": ["DNC", "Elections"],
+      "url": "http://msnbc.com"
+    },
+    "2": {
+      "title": "Top Ten RBs",
+      "tags": ["NFL", "Fantasy Football"],
+      "url": "http://espn.com"
+    },
+    "3": {
+      "title": "New Tech Trends",
+      "tags": ["Technology", "Innovation"],
+      "url": "http://indiehacker.com"
+    },
+    "4": {
+      "title": "Voting Locations",
+      "tags": ["Vote", "Elections"],
+      "url": "http://nytimes.com"
+    },
+    "5": {
+      "title": "Top Ten WRs",
+      "tags": ["NFL", "Fantasy Football"],
+      "url": "http://rotoballer.com"
+    },
+    "6": {
+      "title": "Small Homes",
+      "tags": ["Small Homes", "Interior Design"],
+      "url": "http://dwell.com"
+    },
+    "7": {
+      "title": "Top Ten Power Ballads",
+      "tags": ["Music"],
+      "url": "http://spotify.com"
+    },
+    "8": {
+      "title": "Top Ten QBs",
+      "tags": ["NFL", "Fantasy Football"],
+      "url": "http://rotowire.com"
+    },
+    "9": {
+      "title": "New ioT Trends",
+      "tags": ["Technology", "ioT"],
+      "url": "http://wirecutter.com"
+    },
+    "10": {
+      "title": "Design for Small Spaces",
+      "tags": ["Small Homes", "Interior Design"],
+      "url": "http://architectualdigest.com"
+    },
+    "11": {
+      "title": "ESPN: The Worldwide Leader in Sports",
+      "tags": ["Daily", "Sports"],
+      "url": "https://www.espn.com"
+    },
+    "12": {
+      "title": "IndieHacker: Micro-SaaS of the Day",
+      "tags": ["Daily", "SaaS"],
+      "url": "https://www.indiehackers.com"
+    },
+    "13": {
+      "title": "HackerNews: Top Stories",
+      "tags": ["Daily", "Tech"],
+      "url": "https://hackernews.com"
+    },
+    "14": {
+      "title": "Top 25 WRs",
+      "tags": ["NFL", "Rankings"],
+      "url": "https://www.espn.com"
+    },
+    "15": {
+      "title": "Fantasy Strategies",
+      "tags": ["NFL", "Fantasy Football"],
+      "url": "https://www.espn.com"
+    },
+    "16": {
+      "title": "Who's It Gonna Be?",
+      "tags": ["Elections", "Vote2024", "DNC"],
+      "url": "https://www.espn.com"
+    }
+  },
+  "collections": {
+    "1": {
+      "name": "Daily Reads",
+      "articles": ["11", "12", "13"]
+    },
+    "2": {
+      "name": "NFL",
+      "articles": ["14", "2", "15"]
+    },
+    "3": {
+      "name": "Interior Design",
+      "articles": ["6", "10"]
+    },
+    "4": {
+      "name": "Music",
+      "articles": ["7", "8"]
+    },
+    "5": {
+      "name": "Technology",
+      "articles": ["9"]
+    },
+    "6": {
+      "name": "Elections",
+      "articles": ["16"]
+    }
+  }
+}
